@@ -1,3 +1,5 @@
+import dotenv from "dotenv";
+dotenv.config();
 import express from "express";
 import cors from "cors";
 import mysql from "mysql2/promise";
@@ -11,8 +13,7 @@ const JWT_SECRET = process.env.JWT_SECRET;
 
 app.use(cors());
 app.use(express.json());
-import dotenv from "dotenv";
-dotenv.config();
+
 
 const pool = mysql.createPool({
   host: process.env.DB_HOST,

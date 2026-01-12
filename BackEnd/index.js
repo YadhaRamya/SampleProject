@@ -3,26 +3,23 @@ import cors from "cors";
 import mysql from "mysql2/promise";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import path from "path";
-import { fileURLToPath } from "url";
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT;
+const JWT_SECRET = process.env.JWT_SECRET;
 
-const JWT_SECRET = "secretkey";
 
 app.use(cors());
 app.use(express.json());
+import dotenv from "dotenv";
+dotenv.config();
 
-/* ------------------ MYSQL POOL ------------------ */
 const pool = mysql.createPool({
-  host: "3.110.238.118",
-  user: "zenkara",              // ✅ your MySQL username
-  password: "Zenkara@123", // your MySQL password
-  database: "SampleProject",
-  port: 3306,                // ✅ this is the port
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+  port: process.env.DB_PORT,
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0
@@ -197,14 +194,4 @@ app.delete("/api/products/:id", verifyToken(["ADMIN"]), async (req, res) => {
 /* ------------------ SERVER ------------------ */
 app.listen(PORT, () => {
   console.log(`🚀 Server running at http://localhost:${PORT}`);
-});
-// Serve React build
-app.use(express.static(
-  path.join(__dirname, "../FrontEnd/frontend/build")
-));
-
-app.get("*", (req, res) => {
-  res.sendFile(
-    path.join(__dirname, "../FrontEnd/frontend/build/index.html")
-  );
 });

@@ -1,0 +1,9 @@
+{
+  "name": "sampleproject",
+  "version": "1.0.0",
+  "scripts": {
+    "install-all": "npm install --prefix BackEnd && npm install --prefix FrontEnd/frontend",
+    "build": "npm run build --prefix FrontEnd/frontend",
+    "start": "node BackEnd/index.js"
+  }
+}

@@ -3,9 +3,14 @@ import cors from "cors";
 import mysql from "mysql2/promise";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import path from "path";
+import { fileURLToPath } from "url";
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
+
 const JWT_SECRET = "secretkey";
 
 app.use(cors());
@@ -192,4 +197,14 @@ app.delete("/api/products/:id", verifyToken(["ADMIN"]), async (req, res) => {
 /* ------------------ SERVER ------------------ */
 app.listen(PORT, () => {
   console.log(`🚀 Server running at http://localhost:${PORT}`);
+});
+// Serve React build
+app.use(express.static(
+  path.join(__dirname, "../FrontEnd/frontend/build")
+));
+
+app.get("*", (req, res) => {
+  res.sendFile(
+    path.join(__dirname, "../FrontEnd/frontend/build/index.html")
+  );
 });
